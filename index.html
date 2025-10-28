@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Banquete de los Tres Estamentos — Sala del Vasallaje</title>
-  <!-- Sugerido por el aviso deprecado -->
   <meta name="mobile-web-app-capable" content="yes" />
   <style>
     :root{ --bg:#0b0f17; --wood:#5b3a1e; --gold:#d4af37; --parch:#f3e6c5; --ink:#2a2417; --red:#b33a3a; --green:#2f8f46; --blue:#2b67b6; }
@@ -57,8 +56,8 @@
         <h2>Reglas del banquete</h2>
         <p>Coloca a los cinco personajes…</p>
         <ul>
-          <li>1) El <strong>campesino</strong> se sienta en un <em>extremo</em>…</li>
-          <li>2) El <strong>caballero</strong> está <em>entre</em>…</li>
+          <li>1) El <strong>campesino</strong> en un <em>extremo</em>.</li>
+          <li>2) El <strong>caballero</strong> va <em>entre</em> noble y campesino.</li>
           <li>3) El <strong>rey</strong> no junto al campesino.</li>
           <li>4) El <strong>clérigo</strong> junto al rey.</li>
           <li>5) El <strong>noble</strong> a la izquierda del rey.</li>
@@ -121,7 +120,7 @@
         </div>
 
         <div class="actions">
-          <button class="primary" id="checkBtn" aria-label="Comprobar solución">Comprobar</button>
+          <button class="primary" id="checkBtn" aria-label="Comprobar solución" disabled>Comprobar</button>
           <button id="resetBtn" class="danger" aria-label="Reiniciar">Reiniciar</button>
         </div>
         <div class="footer">Arrastra y suelta como en un juego retro…</div>
@@ -154,19 +153,30 @@
     </div>
   </div>
 
+  <!-- Región aria-live para anuncios breves -->
+  <div class="sr" aria-live="polite" id="liveRegion"></div>
+
   <script>
   (function(){
     var NEXT_CLUE = "PISTA: La llave dorada está bajo la copa del clérigo.";
     var SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"];
+    var STORAGE_KEY = "banquete_state_v1";
+    var STORAGE_UNLOCK = "banquete_gate_unlocked";
+
+    // === Helpers ===
+    function qs(sel,root){ return (root||document).querySelector(sel); }
+    function qsa(sel,root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+    function hasClass(el, cls){ return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1; }
+    function live(msg){ var lr=qs('#liveRegion'); if(lr){ lr.textContent=msg; } }
 
     // === Gate (CURIA) ===
-    var gate = document.getElementById('gate');
-    var panel = document.getElementById('panel');
-    var passInput = document.getElementById('passInput');
-    var gateMsg = document.getElementById('gateMsg');
-    var unlockBtn = document.getElementById('unlockBtn');
+    var gate = qs('#gate');
+    var panel = qs('#panel');
+    var passInput = qs('#passInput');
+    var gateMsg = qs('#gateMsg');
+    var unlockBtn = qs('#unlockBtn');
+    var checkBtn = qs('#checkBtn');
 
-    // En iframe: al primer click dentro del panel, damos foco al input
     panel.addEventListener('pointerdown', function(){ try{ passInput.focus(); }catch(_){}});
 
     function norm(s){
@@ -177,45 +187,48 @@
       return s;
     }
 
+    function hideGate(){
+      gate.style.display = 'none';
+      live('Acceso concedido');
+      try{ checkBtn.focus(); }catch(_){}
+      try{ localStorage.setItem(STORAGE_UNLOCK, '1'); }catch(_){}
+      if (document.body.animate) {
+        document.body.animate([{filter:'brightness(0.8)'},{filter:'brightness(1)'}],{duration:350,easing:'ease-out'});
+      }
+    }
+
     function tryUnlock(){
       var v = norm(passInput.value);
-      if (v === 'curia'){
-        gate.style.display = 'none';
-        if (document.body.animate) {
-          document.body.animate([{filter:'brightness(0.8)'},{filter:'brightness(1)'}],{duration:350,easing:'ease-out'});
-        }
-        gateMsg.textContent = '';
-      } else {
+      if (v === 'curia'){ hideGate(); gateMsg.textContent=''; }
+      else {
         gateMsg.textContent = 'Contraseña incorrecta';
-        passInput.value='';
-        try{ passInput.focus(); }catch(_){}
-        var p = gate.querySelector ? gate.querySelector('.panel') : null;
+        passInput.value=''; try{ passInput.focus(); }catch(_){}
+        var p = qs('.panel', gate);
         if (p && p.animate) p.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
         beep(180, .06);
       }
     }
 
-    unlockBtn.addEventListener('click', function(e){
-      if (e && e.preventDefault) e.preventDefault();
-      tryUnlock();
-    });
-    passInput.addEventListener('keydown', function(e){
-      e = e || window.event;
-      if (e.key === 'Enter' || e.keyCode === 13) {
-        if (e.preventDefault) e.preventDefault();
-        tryUnlock();
-      }
-    });
+    unlockBtn.addEventListener('click', function(e){ if (e && e.preventDefault) e.preventDefault(); tryUnlock(); });
+    passInput.addEventListener('keydown', function(e){ e = e || window.event; if (e.key === 'Enter' || e.keyCode === 13){ if (e.preventDefault) e.preventDefault(); tryUnlock(); } });
 
-    // === DnD básico (igual que antes, ES5) ===
-    var seats = Array.prototype.slice.call(document.querySelectorAll('.seat'));
-    var tray = document.querySelector('.tray');
-    var tokens = Array.prototype.slice.call(document.querySelectorAll('.token'));
+    // Bypass por query o estado previo
+    (function(){
+      var params = (location.search||'').replace(/^\?/,'').split('&').reduce(function(a,p){ var kv=p.split('='); if(kv[0]) a[decodeURIComponent(kv[0])]=decodeURIComponent(kv[1]||''); return a; },{});
+      var skip = params.skipGate === '1';
+      var unlockedBefore = false;
+      try{ unlockedBefore = localStorage.getItem(STORAGE_UNLOCK) === '1'; }catch(_){}
+      if (skip || unlockedBefore){ hideGate(); }
+    })();
+
+    // === DnD ===
+    var seats = qsa('.seat');
+    var tray = qs('.tray');
+    var tokens = qsa('.token');
     var dragEl = null;
 
-    function hasClass(el, cls){ return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1; }
     function dragStart(el){ dragEl = el; el.style.opacity=.85; el.style.transform='scale(1.05)'; el.setAttribute('aria-grabbed','true'); }
-    function dragEnd(){ if(dragEl){ dragEl.style.opacity=''; el=dragEl; el.style.transform=''; el.setAttribute('aria-grabbed','false'); dragEl=null; } }
+    function dragEnd(){ if(dragEl){ var el=dragEl; el.style.opacity=''; el.style.transform=''; el.setAttribute('aria-grabbed','false'); dragEl=null; } }
 
     tokens.forEach(function(el){
       el.addEventListener('dragstart', function(ev){ dragStart(el); if(ev.dataTransfer){ try{ev.dataTransfer.setData('text/plain', el.getAttribute('data-role'));}catch(_){ } ev.dataTransfer.effectAllowed='move'; }});
@@ -237,23 +250,36 @@
     function dragDrop(target){
       if(!dragEl) return;
       if (hasClass(target,'seat')){
-        if (target.firstElementChild){ tray.appendChild(target.firstElementChild); markSeats(); }
+        if(target.firstElementChild){ tray.appendChild(target.firstElementChild); markSeats(); }
         target.appendChild(dragEl);
       } else { tray.appendChild(dragEl); }
-      markSeats(); successBlink(target);
+      markSeats(); successBlink(target); saveState();
     }
-    function markSeats(){ seats.forEach(function(s){ if (s.firstElementChild){ if(!hasClass(s,'occupied')) s.className+=' occupied'; } else { s.className=s.className.replace(/\s*occupied\b/,''); } }); }
+
+    function markSeats(){
+      seats.forEach(function(s){
+        if (s.firstElementChild){ if(!hasClass(s,'occupied')) s.className += ' occupied'; }
+        else { s.className = s.className.replace(/\s*occupied\b/,''); }
+      });
+      updateCheckEnabled();
+    }
+
     function nearestEmptySeat(){ for (var i=0;i<seats.length;i++){ if(!seats[i].firstElementChild) return seats[i]; } return null; }
 
+    function updateCheckEnabled(){
+      var placed = 0;
+      seats.forEach(function(s){ if (s.firstElementChild) placed++; });
+      checkBtn.disabled = placed !== 5;
+    }
+
     // === Comprobación ===
-    var checkBtn = document.getElementById('checkBtn');
-    var resetBtn = document.getElementById('resetBtn');
-    var winModal = document.getElementById('winModal');
-    var winText  = document.getElementById('winText');
-    var closeWin = document.getElementById('closeWin');
+    var resetBtn = qs('#resetBtn');
+    var winModal = qs('#winModal');
+    var winText  = qs('#winText');
+    var closeWin = qs('#closeWin');
 
     checkBtn.addEventListener('click', checkSolution);
-    resetBtn.addEventListener('click', resetAll);
+    resetBtn.addEventListener('click', function(){ resetAll(); saveState(); });
     closeWin.addEventListener('click', function(){ winModal.style.display='none'; });
 
     function currentLine(){
@@ -261,13 +287,23 @@
       seats.forEach(function(s){ var c=s.firstElementChild; arr.push(c ? c.getAttribute('data-role') : null); });
       return arr;
     }
+
     function checkSolution(){
       var arr = currentLine();
       for (var i=0;i<arr.length;i++){ if(!arr[i]){ toast('Coloca a <b>todos</b> los personajes antes de comprobar.'); beep(140,.07); return; } }
       var ok = JSON.stringify(arr) === JSON.stringify(SOL_SLOTS);
-      if(ok){ winText.innerHTML = NEXT_CLUE; winModal.style.display='flex'; confetti(); beep(880,.06); setTimeout(function(){beep(1320,.06);},90); setTimeout(function(){beep(1760,.08);},180); }
-      else { toast('Algo no cuadra… '+logicHints(arr)); var hall=document.querySelector('.hall'); if(hall&&hall.animate) hall.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220}); beep(120,.06); setTimeout(function(){beep(90,.06);},90); }
+      if(ok){
+        winText.innerHTML = NEXT_CLUE;
+        winModal.style.display='flex';
+        confetti();
+        beep(880,.06); setTimeout(function(){beep(1320,.06);},90); setTimeout(function(){beep(1760,.08);},180);
+      }else{
+        toast('Algo no cuadra… '+logicHints(arr));
+        var hall=qs('.hall'); if(hall&&hall.animate) hall.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+        beep(120,.06); setTimeout(function(){beep(90,.06);},90);
+      }
     }
+
     function logicHints(arr){
       var pos={}; for (var i=0;i<arr.length;i++){ pos[arr[i]]=i; }
       var fails=[];
@@ -279,9 +315,66 @@
       if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
       return fails.length? fails[0]+'.' : '¡Muy cerca! Revisa el orden exacto.';
     }
-    function resetAll(){ seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); }); markSeats(); toast('Mesa reiniciada.'); }
 
-    // === Utilidades (ES5) ===
+    function resetAll(){
+      seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
+      markSeats();
+      toast('Mesa reiniciada.');
+    }
+
+    // === Persistencia en localStorage ===
+    function saveState(){
+      try{
+        var state = { seats: currentLine(), tray: [] };
+        // guarda orden en la bandeja (por si importa)
+        var kids = qsa('.token', tray);
+        kids.forEach(function(k){ state.tray.push(k.getAttribute('data-role')); });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }catch(_){}
+    }
+
+    function loadState(){
+      try{
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return false;
+        var st = JSON.parse(raw);
+        if(!st || !st.seats) return false;
+
+        // devuelve todo a la bandeja
+        seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
+
+        // coloca según state.seats
+        for (var i=0;i<st.seats.length;i++){
+          var role = st.seats[i];
+          if (!role) continue;
+          var el = findInTray(role);
+          if (el) seats[i].appendChild(el);
+        }
+        // deja en bandeja lo restante según orden guardado
+        if(st.tray && st.tray.length){
+          st.tray.forEach(function(role){
+            var el = findInTray(role);
+            if (el) tray.appendChild(el);
+          });
+        }
+        markSeats();
+        return true;
+      }catch(_){ return false; }
+    }
+
+    function findInTray(role){
+      var kids = qsa('.token', tray);
+      for (var k=0;k<kids.length;k++){
+        if (kids[k].getAttribute('data-role') === role) return kids[k];
+      }
+      return null;
+    }
+
+    // intenta cargar al inicio
+    loadState();
+    updateCheckEnabled();
+
+    // === Utilidades visuales/sonoras ===
     function toast(html){ var t=document.createElement('div'); t.innerHTML=html; t.style.position='fixed'; t.style.bottom='16px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='#000c'; t.style.color='#fff'; t.style.padding='8px 12px'; t.style.borderRadius='8px'; t.style.border='2px solid #334155'; t.style.zIndex=50; t.style.fontSize='12px'; document.body.appendChild(t); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },2200); }
     function successBlink(el){ if(!el||!el.animate) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
 
@@ -293,7 +386,16 @@
 
     // Atajo docente Alt+S
     document.addEventListener('keydown', function(e){
-      var key=(e.key||'').toLowerCase(); if((e.altKey&&key==='s')||(e.altKey&&e.keyCode===83)){ resetAll(); var kids=Array.prototype.slice.call(tray.children); SOL_SLOTS.forEach(function(name,i){ var found=null; kids=Array.prototype.slice.call(tray.children); for(var k=0;k<kids.length;k++){ if(kids[k].getAttribute&&kids[k].getAttribute('data-role')===name){ found=kids[k]; break; } } if(found) seats[i].appendChild(found); }); markSeats(); toast('Solución colocada (Alt+S).'); }
+      var key=(e.key||'').toLowerCase();
+      if((e.altKey&&key==='s')||(e.altKey&&e.keyCode===83)){
+        resetAll();
+        var order = SOL_SLOTS.slice();
+        order.forEach(function(name,i){
+          var el = findInTray(name);
+          if(el) seats[i].appendChild(el);
+        });
+        markSeats(); saveState(); toast('Solución colocada (Alt+S).');
+      }
     });
 
   })();
