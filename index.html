@@ -338,7 +338,11 @@
     closeWin.addEventListener('click', ()=>{ winModal.style.display='none'; });
 
     function currentLine(){
-      return seats.map(s=> s.firstElementChild?.dataset.role || null);
+      return seats.map(function(s){
+        var child = s.firstElementChild;
+        if(!child) return null;
+        return child.dataset ? child.dataset.role : null;
+      });
     }
 
     function checkSolution(){
@@ -373,7 +377,7 @@
            new Set([arr[pos.Caballero-1],arr[pos.Caballero+1]]).has('Campesino')
       )) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
       if(Math.abs(pos.Rey-pos.Campesino)===1) fails.push('El rey no puede estar junto al campesino');
-      if(Math.abs(pos.Clérigo-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
+      if(Math.abs(pos['Clérigo']-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
       if(!(pos.Noble < pos.Rey)) fails.push('El noble va a la izquierda del rey');
       if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
       if(!fails.length) return '¡Muy cerca! Revisa el orden exacto.';
@@ -396,17 +400,27 @@
     function shake(el){ el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220}); }
     function successBlink(el){ if(!el) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
 
-    // Beep simple con WebAudio
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    // Beep simple con WebAudio (inicialización perezosa para evitar errores en navegadores antiguos)
+    let _beepCtx = null;
+    function _getBeepCtx(){
+      if(_beepCtx) return _beepCtx;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return null;
+      try{ _beepCtx = new AC(); }catch(e){ _beepCtx = null; }
+      return _beepCtx;
+    }
     function beep(freq=440, dur=0.08){
+      const ctx = _getBeepCtx();
+      if(!ctx) return; // sin audio disponible, continuar sin beep
       const o=ctx.createOscillator(); const g=ctx.createGain();
       o.type='square'; o.frequency.value=freq; o.connect(g); g.connect(ctx.destination);
-      g.gain.setValueAtTime(.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.2, ctx.currentTime+.005);
-      g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime+dur);
-      o.start(); o.stop(ctx.currentTime+dur);
+      const now = ctx.currentTime;
+      g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.2, now+.005);
+      g.gain.exponentialRampToValueAtTime(.0001, now+dur);
+      o.start(); o.stop(now+dur);
     }
 
-    // Mini confeti sin dependencias (muy ligero)
+    // Mini confeti sin dependencias (muy ligero) (muy ligero)
     function confetti(){
       for(let i=0;i<36;i++){
         const c=document.createElement('div');
