@@ -253,28 +253,51 @@
     const NEXT_CLUE = "PISTA: La llave dorada está bajo la copa del clérigo.";  // <- Cambia este texto con la pista real
     const SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"]; // solución única izquierda→derecha
 
-    // ======= Puerta de acceso (CURIA) =======
-    const gate = document.getElementById('gate');
-    const passInput = document.getElementById('passInput');
-    const gateMsg = document.getElementById('gateMsg');
-    const unlockBtn = document.getElementById('unlockBtn');
+// ======= Puerta de acceso (CURIA) =======
+const gate = document.getElementById('gate');
+const passInput = document.getElementById('passInput');
+const gateMsg = document.getElementById('gateMsg');
+const unlockBtn = document.getElementById('unlockBtn');
 
-    function tryUnlock(){
-      const v = (passInput.value||"").trim().toUpperCase();
-      if(v === 'CURIA'){
-        gate.style.display='none';
-        // pequeño efecto de entrada
-        document.body.animate([{filter:'brightness(0.8)'},{filter:'brightness(1)'}],{duration:350, easing:'ease-out'});
-      }else{
-        gateMsg.textContent = 'Contraseña incorrecta';
-        passInput.value='';
-        passInput.focus();
-        shake(gate.querySelector('.panel'));
-        beep(180, .06);
-      }
-    }
-    unlockBtn.addEventListener('click', tryUnlock);
-    passInput.addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+// normaliza: quita tildes, espacios sobrantes y case-insensitive
+const norm = (s) =>
+  (s || "")
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim()
+    .toLowerCase();
+
+function tryUnlock() {
+  const v = norm(passInput.value);
+  if (v === 'curia') {
+    gate.style.display = 'none';        // o gate.remove();
+    document.body.animate(
+      [{ filter: 'brightness(0.8)' }, { filter: 'brightness(1)' }],
+      { duration: 350, easing: 'ease-out' }
+    );
+    gateMsg.textContent = '';
+  } else {
+    gateMsg.textContent = 'Contraseña incorrecta';
+    passInput.value = '';
+    passInput.focus();
+    shake(gate.querySelector('.panel'));
+    beep(180, .06);
+  }
+}
+
+// Click en el botón
+unlockBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  tryUnlock();
+});
+
+// Enter dentro del input
+passInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    tryUnlock();
+  }
+});
 
     // ======= Juego de arrastrar y soltar =======
     const seats = Array.from(document.querySelectorAll('.seat'));
@@ -338,11 +361,7 @@
     closeWin.addEventListener('click', ()=>{ winModal.style.display='none'; });
 
     function currentLine(){
-      return seats.map(function(s){
-        var child = s.firstElementChild;
-        if(!child) return null;
-        return child.dataset ? child.dataset.role : null;
-      });
+      return seats.map(s=> s.firstElementChild?.dataset.role || null);
     }
 
     function checkSolution(){
@@ -377,7 +396,7 @@
            new Set([arr[pos.Caballero-1],arr[pos.Caballero+1]]).has('Campesino')
       )) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
       if(Math.abs(pos.Rey-pos.Campesino)===1) fails.push('El rey no puede estar junto al campesino');
-      if(Math.abs(pos['Clérigo']-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
+      if(Math.abs(pos.Clérigo-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
       if(!(pos.Noble < pos.Rey)) fails.push('El noble va a la izquierda del rey');
       if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
       if(!fails.length) return '¡Muy cerca! Revisa el orden exacto.';
@@ -400,27 +419,32 @@
     function shake(el){ el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220}); }
     function successBlink(el){ if(!el) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
 
-    // Beep simple con WebAudio (inicialización perezosa para evitar errores en navegadores antiguos)
-    let _beepCtx = null;
-    function _getBeepCtx(){
-      if(_beepCtx) return _beepCtx;
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if(!AC) return null;
-      try{ _beepCtx = new AC(); }catch(e){ _beepCtx = null; }
-      return _beepCtx;
-    }
-    function beep(freq=440, dur=0.08){
-      const ctx = _getBeepCtx();
-      if(!ctx) return; // sin audio disponible, continuar sin beep
-      const o=ctx.createOscillator(); const g=ctx.createGain();
-      o.type='square'; o.frequency.value=freq; o.connect(g); g.connect(ctx.destination);
-      const now = ctx.currentTime;
-      g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.2, now+.005);
-      g.gain.exponentialRampToValueAtTime(.0001, now+dur);
-      o.start(); o.stop(now+dur);
-    }
-
-    // Mini confeti sin dependencias (muy ligero) (muy ligero)
+    // Beep simple con WebAudio (lazy: crea el contexto sólo cuando se use)
+let _audioCtx = null;
+function getCtx() {
+  if (_audioCtx) return _audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  _audioCtx = new Ctx();
+  return _audioCtx;
+}
+function beep(freq = 440, dur = 0.08) {
+  const ctx = getCtx();
+  if (!ctx) return; // si no hay soporte, no rompemos nada
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'square';
+  o.frequency.value = freq;
+  o.connect(g);
+  g.connect(ctx.destination);
+  const t = ctx.currentTime;
+  g.gain.setValueAtTime(.0001, t);
+  g.gain.exponentialRampToValueAtTime(.2, t + .005);
+  g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  o.start();
+  o.stop(t + dur);
+}
+    // Mini confeti sin dependencias (muy ligero)
     function confetti(){
       for(let i=0;i<36;i++){
         const c=document.createElement('div');
