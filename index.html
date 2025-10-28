@@ -4,127 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Banquete de los Tres Estamentos — Sala del Vasallaje</title>
+  <!-- Sugerido por el aviso deprecado -->
+  <meta name="mobile-web-app-capable" content="yes" />
   <style>
-    :root{
-      --bg:#0b0f17;         /* fondo oscuro tipo cueva/castillo */
-      --wood:#5b3a1e;       /* madera */
-      --gold:#d4af37;       /* dorado medieval */
-      --parch:#f3e6c5;      /* pergamino */
-      --ink:#2a2417;
-      --red:#b33a3a;
-      --green:#2f8f46;
-      --blue:#2b67b6;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      background: radial-gradient(1200px 600px at 70% -10%, #1a2335 0%, var(--bg) 60%);
-      color:#eee; font-family: "Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, monospace;
-      image-rendering: pixelated;
-      overflow:hidden;
-    }
-    /* CRT / scanlines efecto retro */
-    .crt::after{
-      content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;mix-blend-mode:multiply;
-      background:
-        linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),
-        repeating-linear-gradient( to bottom, rgba(255,255,255,.04) 0 2px, rgba(0,0,0,.06) 2px 4px);
-    }
-
+    :root{ --bg:#0b0f17; --wood:#5b3a1e; --gold:#d4af37; --parch:#f3e6c5; --ink:#2a2417; --red:#b33a3a; --green:#2f8f46; --blue:#2b67b6; }
+    *{box-sizing:border-box} html,body{height:100%;margin:0}
+    body{ background: radial-gradient(1200px 600px at 70% -10%, #1a2335 0%, var(--bg) 60%); color:#eee; font-family:"Press Start 2P",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,monospace; image-rendering:pixelated; overflow:hidden }
+    .crt::after{ content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;mix-blend-mode:multiply; background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),repeating-linear-gradient(to bottom, rgba(255,255,255,.04) 0 2px, rgba(0,0,0,.06) 2px 4px) }
     .wrap{max-width:1100px;margin:0 auto;padding:16px;height:100%;display:flex;flex-direction:column;gap:12px}
-
-    h1{font-size:20px;letter-spacing:1px;margin:0;color:#fff;text-shadow:0 2px 0 #000}
-    .subtitle{font-size:12px;color:#cbd5e1;opacity:.9}
-
-    .board{flex:1;display:grid;grid-template-columns: 280px 1fr;gap:14px;min-height:0}
-
-    /* Panel de pistas (pergamino) */
-    .scroll{
-      background:linear-gradient(180deg,#f7ecd1,#e9dbb4);
-      color:var(--ink); border:3px solid #a8843a; border-radius:12px; padding:14px; position:relative;
-      box-shadow: 0 10px 0 #0004 inset, 0 6px 16px rgba(0,0,0,.45);
-    }
-    .scroll h2{font-size:14px;margin:0 0 10px 0;}
-    .scroll p, .scroll li{font-size:12px;line-height:1.55}
-    .scroll ul{padding-left:18px;margin:8px 0}
-    .scroll .hint{margin-top:8px;padding:8px;border:2px dashed #a8843a;border-radius:8px;background:#f6efda}
-
-    /* Mesa del banquete */
-    .hall{
-      background: conic-gradient(from 180deg at 50% -20%, #0f1625, #0a0f1b 65% 100%);
-      border:2px solid #0a101c; border-radius:14px; padding:12px; position:relative;
-      box-shadow: inset 0 0 40px rgba(0,0,0,.6);
-      display:flex; flex-direction:column; gap:10px; overflow:hidden;
-    }
-    .table{
-      margin:0 auto; width:100%; max-width:720px; aspect-ratio: 16/5; position:relative;
-      background:
-        radial-gradient(80% 120% at 50% -20%, #6b4725 0%, #4b2f16 60%, #2d1b0a 100%);
-      border: 6px solid #2e1b0b; border-radius:10px; box-shadow: 0 10px 0 #0006;
-    }
-    .table::before{
-      /* mantel */
-      content:""; position:absolute; inset:10% 4%; border-radius:8px; 
-      background: repeating-linear-gradient(45deg, #f0d7a8 0 10px, #e8cf9e 10px 20px);
-      filter: contrast(1.1) saturate(0.9);
-    }
-
-    /* Asientos (lugares) */
-    .seats{ position:absolute; inset:8% 4%; display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; align-items:end }
-    .seat{ position:relative; height: 100%; min-height:90px; border:2px dashed rgba(255,255,255,.25); border-radius:8px; 
-      display:flex; align-items:center; justify-content:center; padding:6px; transition:.15s;}
-    .seat[data-label]::after{ content: attr(data-label); position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
-      font-size:10px; color:#eee; opacity:.7 }
+    h1{font-size:20px;letter-spacing:1px;margin:0;color:#fff;text-shadow:0 2px 0 #000} .subtitle{font-size:12px;color:#cbd5e1;opacity:.9}
+    .board{flex:1;display:grid;grid-template-columns:280px 1fr;gap:14px;min-height:0}
+    .scroll{background:linear-gradient(180deg,#f7ecd1,#e9dbb4); color:var(--ink); border:3px solid #a8843a; border-radius:12px; padding:14px; position:relative; box-shadow:0 10px 0 #0004 inset,0 6px 16px rgba(0,0,0,.45)}
+    .scroll h2{font-size:14px;margin:0 0 10px 0;} .scroll p,.scroll li{font-size:12px;line-height:1.55} .scroll ul{padding-left:18px;margin:8px 0} .scroll .hint{margin-top:8px;padding:8px;border:2px dashed #a8843a;border-radius:8px;background:#f6efda}
+    .hall{ background: conic-gradient(from 180deg at 50% -20%, #0f1625, #0a0f1b 65% 100%); border:2px solid #0a101c; border-radius:14px; padding:12px; position:relative; box-shadow: inset 0 0 40px rgba(0,0,0,.6); display:flex; flex-direction:column; gap:10px; overflow:hidden }
+    .table{ margin:0 auto; width:100%; max-width:720px; aspect-ratio:16/5; position:relative; background: radial-gradient(80% 120% at 50% -20%, #6b4725 0%, #4b2f16 60%, #2d1b0a 100%); border:6px solid #2e1b0b; border-radius:10px; box-shadow:0 10px 0 #0006 }
+    .table::before{ content:""; position:absolute; inset:10% 4%; border-radius:8px; background: repeating-linear-gradient(45deg,#f0d7a8 0 10px,#e8cf9e 10px 20px); filter:contrast(1.1) saturate(0.9) }
+    .seats{ position:absolute; inset:8% 4%; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-items:end }
+    .seat{ position:relative; height:100%; min-height:90px; border:2px dashed rgba(255,255,255,.25); border-radius:8px; display:flex; align-items:center; justify-content:center; padding:6px; transition:.15s }
+    .seat[data-label]::after{ content:attr(data-label); position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:#eee; opacity:.7 }
     .seat.occupied{ border-style:solid; border-color:#96eaa6 }
-
-    /* Bandeja de personajes */
-    .tray{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-      padding:10px; border:2px dashed #334155; border-radius:10px; background:#0e1627;
-    }
-
-    .token{ width:88px; height:100px; user-select:none; cursor:grab; position:relative; display:flex; align-items:end; justify-content:center }
-    .token:active{ cursor:grabbing }
-
-    /* Sprite-píxel: usar SVG incrustado para que sea offline */
-    .sprite{ width:80px; height:80px; image-rendering: pixelated; filter: drop-shadow(0 2px 0 #000) drop-shadow(0 6px 8px rgba(0,0,0,.4)); }
+    .tray{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; padding:10px; border:2px dashed #334155; border-radius:10px; background:#0e1627 }
+    .token{ width:88px; height:100px; user-select:none; cursor:grab; position:relative; display:flex; align-items:end; justify-content:center } .token:active{cursor:grabbing}
+    .sprite{ width:80px; height:80px; image-rendering:pixelated; filter:drop-shadow(0 2px 0 #000) drop-shadow(0 6px 8px rgba(0,0,0,.4)) }
     .label{ position:absolute; top:-6px; left:50%; transform:translateX(-50%); font-size:10px; padding:2px 6px; border-radius:8px; background:#0009; color:#fff }
-
-    /* Botonera */
     .actions{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap }
     button{ font-family:inherit; font-size:12px; padding:10px 14px; border-radius:10px; border:0; background:#1e293b; color:#fff; box-shadow:0 4px 0 #0b1220; cursor:pointer }
-    button:hover{ transform:translateY(-1px) }
-    button:active{ transform:translateY(1px) }
-    .primary{ background:linear-gradient(180deg,#2b67b6,#1b4a89) }
-    .success{ background:linear-gradient(180deg,#3da45b,#2b7b43) }
-    .danger{ background:linear-gradient(180deg,#b33a3a,#7a2424) }
-
-    /* Puerta de acceso (contraseña CURIA) */
+    button:hover{ transform:translateY(-1px) } button:active{ transform:translateY(1px) }
+    .primary{ background:linear-gradient(180deg,#2b67b6,#1b4a89) } .success{background:linear-gradient(180deg,#3da45b,#2b7b43)} .danger{background:linear-gradient(180deg,#b33a3a,#7a2424)}
     .gate{position:fixed; inset:0; background:radial-gradient(70% 60% at 50% 40%, rgba(0,0,0,.75), rgba(0,0,0,.95) 60% 100%); display:flex; align-items:center; justify-content:center; z-index:40}
-    .gate .panel{
-      width:min(600px, 92vw); background:linear-gradient(180deg,#f7ecd1,#e9dbb4); color:var(--ink); border:6px solid #2e1b0b; border-radius:12px; padding:18px;
-      box-shadow: 0 18px 0 #0005, 0 10px 24px rgba(0,0,0,.6);
-      text-align:center
-    }
-    .panel h2{margin:0 0 6px 0;font-size:16px}
-    .panel p{margin:6px 0 14px 0;font-size:12px}
+    .gate .panel{ width:min(600px,92vw); background:linear-gradient(180deg,#f7ecd1,#e9dbb4); color:var(--ink); border:6px solid #2e1b0b; border-radius:12px; padding:18px; box-shadow:0 18px 0 #0005, 0 10px 24px rgba(0,0,0,.6); text-align:center }
+    .panel h2{margin:0 0 6px 0;font-size:16px} .panel p{margin:6px 0 14px 0;font-size:12px}
     .panel input{width:100%; padding:12px; font-family:inherit; font-size:14px; border:2px solid #9a7b32; border-radius:10px; text-align:center; background:#fffdf5}
     .panel .msg{font-size:12px; color:#7a2424; min-height:1.2em; margin-top:6px}
-
-    /* Modal victoria */
     .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.75); z-index:30 }
     .modal .card{ width:min(640px,92vw); background:linear-gradient(180deg,#f7ecd1,#e9dbb4); color:var(--ink); border:5px solid #a8843a; border-radius:12px; padding:16px; text-align:center }
-    .modal h3{margin:0 0 8px 0; font-size:16px}
-    .modal p{font-size:12px;}
-
+    .modal h3{margin:0 0 8px 0; font-size:16px} .modal p{font-size:12px;}
     .footer{font-size:10px; color:#cbd5e1; opacity:.75; text-align:center}
-
-    /* Accesibilidad visual */
     .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
-  <!-- Fuente retro opcional (si hay conexión). Fallback: monospace -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body class="crt">
@@ -135,22 +53,20 @@
     </header>
 
     <main class="board" aria-live="polite">
-      <!-- Panel de pistas / reglas -->
       <aside class="scroll" aria-label="Pergamino de pistas">
         <h2>Reglas del banquete</h2>
-        <p>Coloca a los cinco personajes en la mesa, de izquierda a derecha. Cuando creas tenerlo, pulsa <strong>Comprobar</strong>.</p>
+        <p>Coloca a los cinco personajes…</p>
         <ul>
-          <li>1) El <strong>campesino</strong> se sienta en un <em>extremo</em> de la mesa.</li>
-          <li>2) El <strong>caballero</strong> está sentado <em>justo entre</em> el <strong>noble</strong> y el <strong>campesino</strong>.</li>
-          <li>3) El <strong>rey</strong> <em>no</em> se sienta junto al campesino.</li>
-          <li>4) El <strong>clérigo</strong> está sentado <em>junto al rey</em>.</li>
-          <li>5) El <strong>noble</strong> se sienta a la <em>izquierda</em> del rey.</li>
-          <li>6) El <strong>rey</strong> <em>no</em> se sienta en los extremos.</li>
+          <li>1) El <strong>campesino</strong> se sienta en un <em>extremo</em>…</li>
+          <li>2) El <strong>caballero</strong> está <em>entre</em>…</li>
+          <li>3) El <strong>rey</strong> no junto al campesino.</li>
+          <li>4) El <strong>clérigo</strong> junto al rey.</li>
+          <li>5) El <strong>noble</strong> a la izquierda del rey.</li>
+          <li>6) El <strong>rey</strong> no en extremos.</li>
         </ul>
-        <div class="hint"><strong>Consejo:</strong> Empieza eligiendo un extremo para el campesino. Después coloca al caballero, que debe quedar entre el noble y el campesino. Eso reduce mucho las opciones.</div>
+        <div class="hint"><strong>Consejo:</strong> Empieza por el extremo del campesino…</div>
       </aside>
 
-      <!-- Zona de juego -->
       <section class="hall" aria-label="Salón del banquete">
         <div class="table" role="group" aria-label="Mesa con cinco asientos">
           <div class="seats">
@@ -168,48 +84,38 @@
           <div class="token" draggable="true" data-role="Rey" role="listitem" aria-grabbed="false" tabindex="0">
             <span class="label">Rey</span>
             <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
-              <rect width="16" height="16" fill="#1b4a89"/>
-              <rect x="6" y="1" width="4" height="2" fill="#d4af37"/>
-              <rect x="5" y="3" width="6" height="6" fill="#ffd166"/>
-              <rect x="6" y="9" width="4" height="5" fill="#ffd166"/>
+              <rect width="16" height="16" fill="#1b4a89"/><rect x="6" y="1" width="4" height="2" fill="#d4af37"/>
+              <rect x="5" y="3" width="6" height="6" fill="#ffd166"/><rect x="6" y="9" width="4" height="5" fill="#ffd166"/>
               <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
             </svg>
           </div>
           <div class="token" draggable="true" data-role="Clérigo" role="listitem" aria-grabbed="false" tabindex="0">
             <span class="label">Clérigo</span>
             <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
-              <rect width="16" height="16" fill="#6b4e2e"/>
-              <rect x="7" y="1" width="2" height="6" fill="#f3e6c5"/>
-              <rect x="6" y="3" width="4" height="6" fill="#e9dbb4"/>
-              <rect x="7" y="9" width="2" height="5" fill="#e9dbb4"/>
+              <rect width="16" height="16" fill="#6b4e2e"/><rect x="7" y="1" width="2" height="6" fill="#f3e6c5"/>
+              <rect x="6" y="3" width="4" height="6" fill="#e9dbb4"/><rect x="7" y="9" width="2" height="5" fill="#e9dbb4"/>
               <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
             </svg>
           </div>
           <div class="token" draggable="true" data-role="Noble" role="listitem" aria-grabbed="false" tabindex="0">
             <span class="label">Noble</span>
             <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
-              <rect width="16" height="16" fill="#823d9b"/>
-              <rect x="5" y="2" width="6" height="6" fill="#c79bd4"/>
-              <rect x="6" y="9" width="4" height="5" fill="#c79bd4"/>
-              <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+              <rect width="16" height="16" fill="#823d9b"/><rect x="5" y="2" width="6" height="6" fill="#c79bd4"/>
+              <rect x="6" y="9" width="4" height="5" fill="#c79bd4"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
             </svg>
           </div>
           <div class="token" draggable="true" data-role="Caballero" role="listitem" aria-grabbed="false" tabindex="0">
             <span class="label">Caballero</span>
             <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
-              <rect width="16" height="16" fill="#3b3f46"/>
-              <rect x="5" y="2" width="6" height="6" fill="#b0bec5"/>
-              <rect x="6" y="9" width="4" height="5" fill="#b0bec5"/>
-              <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+              <rect width="16" height="16" fill="#3b3f46"/><rect x="5" y="2" width="6" height="6" fill="#b0bec5"/>
+              <rect x="6" y="9" width="4" height="5" fill="#b0bec5"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
             </svg>
           </div>
           <div class="token" draggable="true" data-role="Campesino" role="listitem" aria-grabbed="false" tabindex="0">
             <span class="label">Campesino</span>
             <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
-              <rect width="16" height="16" fill="#7a5a3b"/>
-              <rect x="5" y="2" width="6" height="6" fill="#e1c699"/>
-              <rect x="6" y="9" width="4" height="5" fill="#e1c699"/>
-              <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+              <rect width="16" height="16" fill="#7a5a3b"/><rect x="5" y="2" width="6" height="6" fill="#e1c699"/>
+              <rect x="6" y="9" width="4" height="5" fill="#e1c699"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
             </svg>
           </div>
         </div>
@@ -218,17 +124,17 @@
           <button class="primary" id="checkBtn" aria-label="Comprobar solución">Comprobar</button>
           <button id="resetBtn" class="danger" aria-label="Reiniciar">Reiniciar</button>
         </div>
-        <div class="footer">Arrastra y suelta como en un juego retro. Consejo: también puedes usar <kbd>Espacio</kbd> para tomar/soltar una pieza con el foco.</div>
+        <div class="footer">Arrastra y suelta como en un juego retro…</div>
       </section>
     </main>
   </div>
 
-  <!-- Puerta de acceso: contraseña CURIA -->
+  <!-- Gate -->
   <div class="gate" id="gate">
-    <div class="panel">
+    <div class="panel" id="panel">
       <h2>CURIA requerida</h2>
-      <p>Para acceder a esta sala necesitas la palabra encontrada en el enigma anterior.</p>
-      <input id="passInput" type="password" placeholder="Introduce la palabra…" aria-label="Introduce la contraseña" autofocus />
+      <p>Introduce la palabra encontrada en el enigma anterior.</p>
+      <input id="passInput" type="password" placeholder="Introduce la palabra…" aria-label="Introduce la contraseña" />
       <div class="msg" id="gateMsg" role="status"></div>
       <div style="display:flex; gap:8px; justify-content:center; margin-top:10px">
         <button class="primary" id="unlockBtn">Entrar</button>
@@ -237,7 +143,7 @@
     </div>
   </div>
 
-  <!-- Modal de victoria -->
+  <!-- Modal -->
   <div class="modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winTitle">
     <div class="card">
       <h3 id="winTitle">¡Enhorabuena! 🏆</h3>
@@ -249,229 +155,148 @@
   </div>
 
   <script>
-    // ======= Configuración del profesor =======
-    const NEXT_CLUE = "PISTA: La llave dorada está bajo la copa del clérigo.";  // <- Cambia este texto con la pista real
-    const SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"]; // solución única izquierda→derecha
+  (function(){
+    var NEXT_CLUE = "PISTA: La llave dorada está bajo la copa del clérigo.";
+    var SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"];
 
-// ======= Puerta de acceso (CURIA) =======
-const gate = document.getElementById('gate');
-const passInput = document.getElementById('passInput');
-const gateMsg = document.getElementById('gateMsg');
-const unlockBtn = document.getElementById('unlockBtn');
+    // === Gate (CURIA) ===
+    var gate = document.getElementById('gate');
+    var panel = document.getElementById('panel');
+    var passInput = document.getElementById('passInput');
+    var gateMsg = document.getElementById('gateMsg');
+    var unlockBtn = document.getElementById('unlockBtn');
 
-// normaliza: quita tildes, espacios sobrantes y case-insensitive
-const norm = (s) =>
-  (s || "")
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .trim()
-    .toLowerCase();
+    // En iframe: al primer click dentro del panel, damos foco al input
+    panel.addEventListener('pointerdown', function(){ try{ passInput.focus(); }catch(_){}});
 
-function tryUnlock() {
-  const v = norm(passInput.value);
-  if (v === 'curia') {
-    gate.style.display = 'none';        // o gate.remove();
-    document.body.animate(
-      [{ filter: 'brightness(0.8)' }, { filter: 'brightness(1)' }],
-      { duration: 350, easing: 'ease-out' }
-    );
-    gateMsg.textContent = '';
-  } else {
-    gateMsg.textContent = 'Contraseña incorrecta';
-    passInput.value = '';
-    passInput.focus();
-    shake(gate.querySelector('.panel'));
-    beep(180, .06);
-  }
-}
+    function norm(s){
+      s = (s || "");
+      if (s.normalize) s = s.normalize('NFD');
+      s = s.replace(/[\u0300-\u036f]/g, '');
+      s = s.replace(/^\s+|\s+$/g,'').toLowerCase();
+      return s;
+    }
 
-// Click en el botón
-unlockBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  tryUnlock();
-});
+    function tryUnlock(){
+      var v = norm(passInput.value);
+      if (v === 'curia'){
+        gate.style.display = 'none';
+        if (document.body.animate) {
+          document.body.animate([{filter:'brightness(0.8)'},{filter:'brightness(1)'}],{duration:350,easing:'ease-out'});
+        }
+        gateMsg.textContent = '';
+      } else {
+        gateMsg.textContent = 'Contraseña incorrecta';
+        passInput.value='';
+        try{ passInput.focus(); }catch(_){}
+        var p = gate.querySelector ? gate.querySelector('.panel') : null;
+        if (p && p.animate) p.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+        beep(180, .06);
+      }
+    }
 
-// Enter dentro del input
-passInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    tryUnlock();
-  }
-});
+    unlockBtn.addEventListener('click', function(e){
+      if (e && e.preventDefault) e.preventDefault();
+      tryUnlock();
+    });
+    passInput.addEventListener('keydown', function(e){
+      e = e || window.event;
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        if (e.preventDefault) e.preventDefault();
+        tryUnlock();
+      }
+    });
 
-    // ======= Juego de arrastrar y soltar =======
-    const seats = Array.from(document.querySelectorAll('.seat'));
-    const tray = document.querySelector('.tray');
-    const tokens = Array.from(document.querySelectorAll('.token'));
+    // === DnD básico (igual que antes, ES5) ===
+    var seats = Array.prototype.slice.call(document.querySelectorAll('.seat'));
+    var tray = document.querySelector('.tray');
+    var tokens = Array.prototype.slice.call(document.querySelectorAll('.token'));
+    var dragEl = null;
 
-    let dragEl = null; let origin = null;
+    function hasClass(el, cls){ return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1; }
+    function dragStart(el){ dragEl = el; el.style.opacity=.85; el.style.transform='scale(1.05)'; el.setAttribute('aria-grabbed','true'); }
+    function dragEnd(){ if(dragEl){ dragEl.style.opacity=''; el=dragEl; el.style.transform=''; el.setAttribute('aria-grabbed','false'); dragEl=null; } }
 
-    // Accesibilidad básica con teclado: Espacio coge/suelta
-    tokens.forEach(t=>{
-      t.addEventListener('keydown', e=>{
-        if(e.code==='Space'){
-          e.preventDefault();
-          if(!dragEl){ dragStart(t); }
-          else{ dragDrop(t.parentElement.classList.contains('seat')?tray:nearestEmptySeat()||tray ); dragEnd(); }
+    tokens.forEach(function(el){
+      el.addEventListener('dragstart', function(ev){ dragStart(el); if(ev.dataTransfer){ try{ev.dataTransfer.setData('text/plain', el.getAttribute('data-role'));}catch(_){ } ev.dataTransfer.effectAllowed='move'; }});
+      el.addEventListener('dragend', dragEnd);
+      el.addEventListener('keydown', function(e){
+        if ((e.code && e.code==='Space') || e.keyCode===32){
+          if (e.preventDefault) e.preventDefault();
+          if(!dragEl){ dragStart(el); }
+          else{ var target = (el.parentElement && hasClass(el.parentElement,'seat')) ? tray : (nearestEmptySeat() || tray); dragDrop(target); dragEnd(); }
         }
       });
     });
 
-    function dragStart(el){ dragEl = el; origin = el.parentElement; el.style.opacity=.85; el.style.transform='scale(1.05)'; el.setAttribute('aria-grabbed','true'); }
-    function dragEnd(){ if(dragEl){ dragEl.style.opacity=''; dragEl.style.transform=''; dragEl.setAttribute('aria-grabbed','false'); dragEl=null; origin=null; } }
-
-    // Drag & Drop con puntero
-    tokens.forEach(el=>{
-      el.addEventListener('dragstart', ev=>{ dragStart(el); ev.dataTransfer.setData('text/plain', el.dataset.role); ev.dataTransfer.effectAllowed='move'; });
-      el.addEventListener('dragend', dragEnd);
-    });
-    [tray, ...seats].forEach(zone=>{
-      zone.addEventListener('dragover', ev=>{ ev.preventDefault(); ev.dataTransfer.dropEffect='move'; });
-      zone.addEventListener('drop', ev=>{ ev.preventDefault(); dragDrop(zone); });
+    [tray].concat(seats).forEach(function(zone){
+      zone.addEventListener('dragover', function(ev){ if (ev.preventDefault) ev.preventDefault(); if (ev.dataTransfer) ev.dataTransfer.dropEffect='move'; });
+      zone.addEventListener('drop', function(ev){ if (ev.preventDefault) ev.preventDefault(); dragDrop(zone); });
     });
 
     function dragDrop(target){
       if(!dragEl) return;
-      if(target.classList.contains('seat')){
-        // si ya hay alguien en el asiento, lo devolvemos a la bandeja
-        if(target.firstElementChild){ tray.appendChild(target.firstElementChild); markSeats(); }
+      if (hasClass(target,'seat')){
+        if (target.firstElementChild){ tray.appendChild(target.firstElementChild); markSeats(); }
         target.appendChild(dragEl);
-      }else{
-        tray.appendChild(dragEl);
-      }
-      markSeats();
-      successBlink(target);
+      } else { tray.appendChild(dragEl); }
+      markSeats(); successBlink(target);
     }
+    function markSeats(){ seats.forEach(function(s){ if (s.firstElementChild){ if(!hasClass(s,'occupied')) s.className+=' occupied'; } else { s.className=s.className.replace(/\s*occupied\b/,''); } }); }
+    function nearestEmptySeat(){ for (var i=0;i<seats.length;i++){ if(!seats[i].firstElementChild) return seats[i]; } return null; }
 
-    function markSeats(){
-      seats.forEach(s=> s.classList.toggle('occupied', !!s.firstElementChild));
-    }
-
-    function nearestEmptySeat(){ return seats.find(s=>!s.firstElementChild); }
-
-    // ======= Comprobación de solución =======
-    const checkBtn = document.getElementById('checkBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const winModal = document.getElementById('winModal');
-    const winText  = document.getElementById('winText');
-    const closeWin = document.getElementById('closeWin');
+    // === Comprobación ===
+    var checkBtn = document.getElementById('checkBtn');
+    var resetBtn = document.getElementById('resetBtn');
+    var winModal = document.getElementById('winModal');
+    var winText  = document.getElementById('winText');
+    var closeWin = document.getElementById('closeWin');
 
     checkBtn.addEventListener('click', checkSolution);
     resetBtn.addEventListener('click', resetAll);
-    closeWin.addEventListener('click', ()=>{ winModal.style.display='none'; });
+    closeWin.addEventListener('click', function(){ winModal.style.display='none'; });
 
     function currentLine(){
-      return seats.map(s=> s.firstElementChild?.dataset.role || null);
+      var arr = [];
+      seats.forEach(function(s){ var c=s.firstElementChild; arr.push(c ? c.getAttribute('data-role') : null); });
+      return arr;
     }
-
     function checkSolution(){
-      const arr = currentLine();
-      if(arr.some(x=>!x)){
-        toast('Coloca a <b>todos</b> los personajes antes de comprobar.');
-        beep(140, .07);
-        return;
-      }
-      const ok = JSON.stringify(arr) === JSON.stringify(SOL_SLOTS);
-      if(ok){
-        winText.innerHTML = NEXT_CLUE;
-        winModal.style.display='flex';
-        confetti();
-        beep(880,.06); setTimeout(()=>beep(1320,.06),90); setTimeout(()=>beep(1760,.08),180);
-      }else{
-        // Evaluación formativa: marcar pistas automáticas sin revelar
-        const hints = logicHints(arr);
-        toast('Algo no cuadra… '+hints);
-        shake(document.querySelector('.hall'));
-        beep(120,.06); setTimeout(()=>beep(90,.06),90);
-      }
+      var arr = currentLine();
+      for (var i=0;i<arr.length;i++){ if(!arr[i]){ toast('Coloca a <b>todos</b> los personajes antes de comprobar.'); beep(140,.07); return; } }
+      var ok = JSON.stringify(arr) === JSON.stringify(SOL_SLOTS);
+      if(ok){ winText.innerHTML = NEXT_CLUE; winModal.style.display='flex'; confetti(); beep(880,.06); setTimeout(function(){beep(1320,.06);},90); setTimeout(function(){beep(1760,.08);},180); }
+      else { toast('Algo no cuadra… '+logicHints(arr)); var hall=document.querySelector('.hall'); if(hall&&hall.animate) hall.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220}); beep(120,.06); setTimeout(function(){beep(90,.06);},90); }
     }
-
-    // Genera una pequeña pista de qué regla falla
     function logicHints(arr){
-      const pos = Object.fromEntries(arr.map((r,i)=>[r,i]));
-      const fails = [];
+      var pos={}; for (var i=0;i<arr.length;i++){ pos[arr[i]]=i; }
+      var fails=[];
       if(!(pos.Campesino===0||pos.Campesino===4)) fails.push('El campesino debe ir a un extremo');
-      if(!(pos.Caballero!==0 && pos.Caballero!==4 &&
-           new Set([arr[pos.Caballero-1],arr[pos.Caballero+1]]).has('Noble') &&
-           new Set([arr[pos.Caballero-1],arr[pos.Caballero+1]]).has('Campesino')
-      )) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
+      if(!(pos.Caballero!==0 && pos.Caballero!==4 && (arr[pos.Caballero-1]==='Noble'||arr[pos.Caballero+1]==='Noble') && (arr[pos.Caballero-1]==='Campesino'||arr[pos.Caballero+1]==='Campesino'))) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
       if(Math.abs(pos.Rey-pos.Campesino)===1) fails.push('El rey no puede estar junto al campesino');
-      if(Math.abs(pos.Clérigo-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
+      if(Math.abs(pos["Clérigo"]-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
       if(!(pos.Noble < pos.Rey)) fails.push('El noble va a la izquierda del rey');
       if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
-      if(!fails.length) return '¡Muy cerca! Revisa el orden exacto.';
-      return fails[0]+'.';
+      return fails.length? fails[0]+'.' : '¡Muy cerca! Revisa el orden exacto.';
     }
+    function resetAll(){ seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); }); markSeats(); toast('Mesa reiniciada.'); }
 
-    function resetAll(){
-      seats.forEach(s=>{ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
-      markSeats();
-      toast('Mesa reiniciada.');
-    }
+    // === Utilidades (ES5) ===
+    function toast(html){ var t=document.createElement('div'); t.innerHTML=html; t.style.position='fixed'; t.style.bottom='16px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='#000c'; t.style.color='#fff'; t.style.padding='8px 12px'; t.style.borderRadius='8px'; t.style.border='2px solid #334155'; t.style.zIndex=50; t.style.fontSize='12px'; document.body.appendChild(t); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },2200); }
+    function successBlink(el){ if(!el||!el.animate) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
 
-    // ======= Efectos retro mínimos =======
-    function toast(html){
-      const t=document.createElement('div');
-      t.innerHTML=html;
-      Object.assign(t.style,{position:'fixed',bottom:'16px',left:'50%',transform:'translateX(-50%)',background:'#000c',color:'#fff',padding:'8px 12px',borderRadius:'8px',border:'2px solid #334155',zIndex:50,fontSize:'12px'});
-      document.body.appendChild(t); setTimeout(()=>t.remove(), 2200);
-    }
-    function shake(el){ el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220}); }
-    function successBlink(el){ if(!el) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
+    var _audioCtx=null;
+    function getCtx(){ if(_audioCtx) return _audioCtx; var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return null; try{_audioCtx=new Ctx();}catch(_){_audioCtx=null;} return _audioCtx; }
+    function beep(freq,dur){ if(freq==null)freq=440; if(dur==null)dur=.08; var ctx=getCtx(); if(!ctx) return; var o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.value=freq; o.connect(g); g.connect(ctx.destination); var t=ctx.currentTime; try{ g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+dur);}catch(_){ } o.start(); o.stop(t+dur); }
 
-    // Beep simple con WebAudio (lazy: crea el contexto sólo cuando se use)
-let _audioCtx = null;
-function getCtx() {
-  if (_audioCtx) return _audioCtx;
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if (!Ctx) return null;
-  _audioCtx = new Ctx();
-  return _audioCtx;
-}
-function beep(freq = 440, dur = 0.08) {
-  const ctx = getCtx();
-  if (!ctx) return; // si no hay soporte, no rompemos nada
-  const o = ctx.createOscillator();
-  const g = ctx.createGain();
-  o.type = 'square';
-  o.frequency.value = freq;
-  o.connect(g);
-  g.connect(ctx.destination);
-  const t = ctx.currentTime;
-  g.gain.setValueAtTime(.0001, t);
-  g.gain.exponentialRampToValueAtTime(.2, t + .005);
-  g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-  o.start();
-  o.stop(t + dur);
-}
-    // Mini confeti sin dependencias (muy ligero)
-    function confetti(){
-      for(let i=0;i<36;i++){
-        const c=document.createElement('div');
-        const size = 6+Math.random()*6;
-        c.style.position='fixed'; c.style.left=(50+Math.random()*20-10)+'%'; c.style.top='-10px';
-        c.style.width=size+'px'; c.style.height=size+'px'; c.style.background=['#ffd166','#ef476f','#06d6a0','#118ab2'][i%4];
-        c.style.transform=`rotate(${Math.random()*360}deg)`; c.style.borderRadius:'2px'; c.style.zIndex=60;
-        document.body.appendChild(c);
-        const endY = window.innerHeight + 20;
-        c.animate([{transform:c.style.transform, top:'-10px'},{transform:c.style.transform, top:endY+'px'}],{duration:1200+Math.random()*600, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=()=>c.remove();
-      }
-    }
+    function confetti(){ for(var i=0;i<36;i++){ var c=document.createElement('div'); var size=6+Math.random()*6; c.style.position='fixed'; c.style.left=(50+Math.random()*20-10)+'%'; c.style.top='-10px'; c.style.width=size+'px'; c.style.height=size+'px'; var colors=['#ffd166','#ef476f','#06d6a0','#118ab2']; c.style.background=colors[i%4]; c.style.transform='rotate('+(Math.random()*360)+'deg)'; c.style.borderRadius='2px'; c.style.zIndex=60; document.body.appendChild(c); var endY=window.innerHeight+20; if(c.animate){ c.animate([{transform:c.style.transform, top:'-10px'},{transform:c.style.transform, top:endY+'px'}],{duration:1200+Math.random()*600, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=function(){ if(c.parentNode) c.parentNode.removeChild(c); }; } } }
 
-    // Atajo docente: Alt+S rellena solución
-    document.addEventListener('keydown', (e)=>{
-      if(e.altKey && e.key.toLowerCase()==='s'){
-        // limpiar
-        resetAll();
-        // colocar solución
-        SOL_SLOTS.forEach((name, i)=>{
-          const el = Array.from(tray.children).find(n=>n.dataset?.role===name);
-          if(el) seats[i].appendChild(el);
-        });
-        markSeats();
-        toast('Solución colocada (atajo docente Alt+S).');
-      }
+    // Atajo docente Alt+S
+    document.addEventListener('keydown', function(e){
+      var key=(e.key||'').toLowerCase(); if((e.altKey&&key==='s')||(e.altKey&&e.keyCode===83)){ resetAll(); var kids=Array.prototype.slice.call(tray.children); SOL_SLOTS.forEach(function(name,i){ var found=null; kids=Array.prototype.slice.call(tray.children); for(var k=0;k<kids.length;k++){ if(kids[k].getAttribute&&kids[k].getAttribute('data-role')===name){ found=kids[k]; break; } } if(found) seats[i].appendChild(found); }); markSeats(); toast('Solución colocada (Alt+S).'); }
     });
+
+  })();
   </script>
 </body>
 </html>
