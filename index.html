@@ -41,8 +41,7 @@
     .footer{font-size:10px; color:#cbd5e1; opacity:.75; text-align:center}
     .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body class="crt">
@@ -53,115 +52,346 @@
     </header>
 
     <main class="board" aria-live="polite">
-      <aside class="scroll">
+      <aside class="scroll" aria-label="Pergamino de pistas">
         <h2>Reglas del banquete</h2>
-        <p>Coloca a los cinco personajes en la mesa…</p>
+        <p>Coloca a los cinco personajes…</p>
+        <ul>
+          <li>1) El <strong>campesino</strong> en un <em>extremo</em>.</li>
+          <li>2) El <strong>caballero</strong> va <em>entre</em> noble y campesino.</li>
+          <li>3) El <strong>rey</strong> no junto al campesino.</li>
+          <li>4) El <strong>clérigo</strong> junto al rey.</li>
+          <li>5) El <strong>noble</strong> a la izquierda del rey.</li>
+          <li>6) El <strong>rey</strong> no en extremos.</li>
+        </ul>
+        <div class="hint"><strong>Consejo:</strong> Empieza por el extremo del campesino…</div>
       </aside>
 
-      <section class="hall">
-        <div class="table">
+      <section class="hall" aria-label="Salón del banquete">
+        <div class="table" role="group" aria-label="Mesa con cinco asientos">
           <div class="seats">
-            <div class="seat" data-label="Asiento 1"></div>
-            <div class="seat" data-label="Asiento 2"></div>
-            <div class="seat" data-label="Asiento 3"></div>
-            <div class="seat" data-label="Asiento 4"></div>
-            <div class="seat" data-label="Asiento 5"></div>
+            <div class="seat" data-label="Asiento 1" data-seat="0" aria-dropeffect="move"></div>
+            <div class="seat" data-label="Asiento 2" data-seat="1" aria-dropeffect="move"></div>
+            <div class="seat" data-label="Asiento 3" data-seat="2" aria-dropeffect="move"></div>
+            <div class="seat" data-label="Asiento 4" data-seat="3" aria-dropeffect="move"></div>
+            <div class="seat" data-label="Asiento 5" data-seat="4" aria-dropeffect="move"></div>
           </div>
         </div>
 
-        <div class="tray">
-          <div class="token" draggable="true" data-role="Rey"><span class="label">Rey</span></div>
-          <div class="token" draggable="true" data-role="Clérigo"><span class="label">Clérigo</span></div>
-          <div class="token" draggable="true" data-role="Noble"><span class="label">Noble</span></div>
-          <div class="token" draggable="true" data-role="Caballero"><span class="label">Caballero</span></div>
-          <div class="token" draggable="true" data-role="Campesino"><span class="label">Campesino</span></div>
+        <h3 class="sr" id="trayLabel">Bandeja de personajes</h3>
+        <div class="tray" role="list" aria-labelledby="trayLabel">
+          <!-- Tokens -->
+          <div class="token" draggable="true" data-role="Rey" role="listitem" aria-grabbed="false" tabindex="0">
+            <span class="label">Rey</span>
+            <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
+              <rect width="16" height="16" fill="#1b4a89"/><rect x="6" y="1" width="4" height="2" fill="#d4af37"/>
+              <rect x="5" y="3" width="6" height="6" fill="#ffd166"/><rect x="6" y="9" width="4" height="5" fill="#ffd166"/>
+              <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+            </svg>
+          </div>
+          <div class="token" draggable="true" data-role="Clérigo" role="listitem" aria-grabbed="false" tabindex="0">
+            <span class="label">Clérigo</span>
+            <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
+              <rect width="16" height="16" fill="#6b4e2e"/><rect x="7" y="1" width="2" height="6" fill="#f3e6c5"/>
+              <rect x="6" y="3" width="4" height="6" fill="#e9dbb4"/><rect x="7" y="9" width="2" height="5" fill="#e9dbb4"/>
+              <rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+            </svg>
+          </div>
+          <div class="token" draggable="true" data-role="Noble" role="listitem" aria-grabbed="false" tabindex="0">
+            <span class="label">Noble</span>
+            <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
+              <rect width="16" height="16" fill="#823d9b"/><rect x="5" y="2" width="6" height="6" fill="#c79bd4"/>
+              <rect x="6" y="9" width="4" height="5" fill="#c79bd4"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+            </svg>
+          </div>
+          <div class="token" draggable="true" data-role="Caballero" role="listitem" aria-grabbed="false" tabindex="0">
+            <span class="label">Caballero</span>
+            <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
+              <rect width="16" height="16" fill="#3b3f46"/><rect x="5" y="2" width="6" height="6" fill="#b0bec5"/>
+              <rect x="6" y="9" width="4" height="5" fill="#b0bec5"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+            </svg>
+          </div>
+          <div class="token" draggable="true" data-role="Campesino" role="listitem" aria-grabbed="false" tabindex="0">
+            <span class="label">Campesino</span>
+            <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true">
+              <rect width="16" height="16" fill="#7a5a3b"/><rect x="5" y="2" width="6" height="6" fill="#e1c699"/>
+              <rect x="6" y="9" width="4" height="5" fill="#e1c699"/><rect x="4" y="14" width="8" height="2" fill="#2e1b0b"/>
+            </svg>
+          </div>
         </div>
 
         <div class="actions">
-          <button class="primary" id="checkBtn" disabled>Comprobar</button>
-          <button class="danger" id="resetBtn">Reiniciar</button>
+          <button class="primary" id="checkBtn" aria-label="Comprobar solución" disabled>Comprobar</button>
+          <button id="resetBtn" class="danger" aria-label="Reiniciar">Reiniciar</button>
         </div>
+        <div class="footer">Arrastra y suelta como en un juego retro…</div>
       </section>
     </main>
   </div>
 
+  <!-- Gate -->
   <div class="gate" id="gate">
-    <div class="panel">
+    <div class="panel" id="panel">
       <h2>CURIA requerida</h2>
       <p>Introduce la palabra encontrada en el enigma anterior.</p>
-      <input id="passInput" type="password" placeholder="Introduce la palabra…" />
-      <div class="msg" id="gateMsg"></div>
-      <button class="primary" id="unlockBtn">Entrar</button>
+      <input id="passInput" type="password" placeholder="Introduce la palabra…" aria-label="Introduce la contraseña" />
+      <div class="msg" id="gateMsg" role="status"></div>
+      <div style="display:flex; gap:8px; justify-content:center; margin-top:10px">
+        <button class="primary" id="unlockBtn">Entrar</button>
+      </div>
+      <p style="margin-top:12px;font-size:10px;opacity:.7">Pista: Asamblea de nobles y clérigos del rey en la Edad Media.</p>
     </div>
   </div>
 
-  <div class="modal" id="winModal">
+  <!-- Modal -->
+  <div class="modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winTitle">
     <div class="card">
-      <h3>¡Enhorabuena! 🏆</h3>
+      <h3 id="winTitle">¡Enhorabuena! 🏆</h3>
       <p id="winText"></p>
-      <button class="success" id="closeWin">Continuar</button>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:10px">
+        <button class="success" id="closeWin">Continuar</button>
+      </div>
     </div>
   </div>
+
+  <!-- Región aria-live para anuncios breves -->
+  <div class="sr" aria-live="polite" id="liveRegion"></div>
 
   <script>
   (function(){
-    const SOL_SLOTS=["Campesino","Caballero","Noble","Rey","Clérigo"];
-    const NEXT_CLUE="PISTA: La llave dorada está bajo la copa del clérigo.";
+    var NEXT_CLUE = "PISTA: La llave dorada está bajo la copa del clérigo.";
+    var SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"];
+    var STORAGE_KEY = "banquete_state_v1"; // (solo para la mesa, no para el gate)
 
-    const gate=document.getElementById("gate");
-    const input=document.getElementById("passInput");
-    const msg=document.getElementById("gateMsg");
-    const unlock=document.getElementById("unlockBtn");
-    const check=document.getElementById("checkBtn");
+    // === Helpers ===
+    function qs(sel,root){ return (root||document).querySelector(sel); }
+    function qsa(sel,root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+    function hasClass(el, cls){ return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1; }
+    function live(msg){ var lr=qs('#liveRegion'); if(lr){ lr.textContent=msg; } }
 
-    function unlockGate(){
-      const val=input.value.trim().toLowerCase();
-      if(val==="curia"){gate.style.display="none";check.focus();}
-      else{msg.textContent="Contraseña incorrecta";input.value="";}
+    // === Gate (CURIA) ===
+    var gate = qs('#gate');
+    var panel = qs('#panel');
+    var passInput = qs('#passInput');
+    var gateMsg = qs('#gateMsg');
+    var unlockBtn = qs('#unlockBtn');
+    var checkBtn = qs('#checkBtn');
+
+    panel.addEventListener('pointerdown', function(){ try{ passInput.focus(); }catch(_){}});
+
+    function norm(s){
+      s = (s || "");
+      if (s.normalize) s = s.normalize('NFD');
+      s = s.replace(/[\u0300-\u036f]/g, '');
+      s = s.replace(/^\s+|\s+$/g,'').toLowerCase();
+      return s;
     }
-    unlock.onclick=unlockGate;
-    input.onkeydown=e=>{if(e.key==="Enter")unlockGate();};
 
-    // Drag & drop
-    const seats=[...document.querySelectorAll(".seat")];
-    const tray=document.querySelector(".tray");
-    let drag=null;
+    function hideGate(){
+      gate.style.display = 'none';
+      live('Acceso concedido');
+      try{ checkBtn.focus(); }catch(_){}
+      if (document.body.animate) {
+        document.body.animate([{filter:'brightness(0.8)'},{filter:'brightness(1)'}],{duration:350,easing:'ease-out'});
+      }
+    }
 
-    document.querySelectorAll(".token").forEach(tok=>{
-      tok.addEventListener("dragstart",e=>{drag=tok;e.dataTransfer.effectAllowed="move";});
-      tok.addEventListener("dragend",()=>{drag=null;});
-    });
-    [tray,...seats].forEach(z=>{
-      z.addEventListener("dragover",e=>{e.preventDefault();});
-      z.addEventListener("drop",e=>{
-        e.preventDefault();
-        if(!drag)return;
-        if(z.classList.contains("seat")){
-          if(z.firstChild)tray.appendChild(z.firstChild);
-          z.appendChild(drag);
-        }else tray.appendChild(drag);
-        update();
+    function tryUnlock(){
+      var v = norm(passInput.value);
+      if (v === 'curia'){ hideGate(); gateMsg.textContent=''; }
+      else {
+        gateMsg.textContent = 'Contraseña incorrecta';
+        passInput.value=''; try{ passInput.focus(); }catch(_){}
+        var p = qs('.panel', gate);
+        if (p && p.animate) p.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+        beep(180, .06);
+      }
+    }
+
+    unlockBtn.addEventListener('click', function(e){ if (e && e.preventDefault) e.preventDefault(); tryUnlock(); });
+    passInput.addEventListener('keydown', function(e){ e = e || window.event; if (e.key === 'Enter' || e.keyCode === 13){ if (e.preventDefault) e.preventDefault(); tryUnlock(); } });
+
+    // Bypass SOLO por query (?skipGate=1). No se recuerda el desbloqueo.
+    (function(){
+      var params = (location.search||'').replace(/^\?/,'').split('&').reduce(function(a,p){ var kv=p.split('='); if(kv[0]) a[decodeURIComponent(kv[0])]=decodeURIComponent(kv[1]||''); return a; },{});
+      var skip = params.skipGate === '1';
+      if (skip){ hideGate(); }
+    })();
+
+    // === DnD ===
+    var seats = qsa('.seat');
+    var tray = qs('.tray');
+    var tokens = qsa('.token');
+    var dragEl = null;
+
+    function dragStart(el){ dragEl = el; el.style.opacity=.85; el.style.transform='scale(1.05)'; el.setAttribute('aria-grabbed','true'); }
+    function dragEnd(){ if(dragEl){ var el=dragEl; el.style.opacity=''; el.style.transform=''; el.setAttribute('aria-grabbed','false'); dragEl=null; } }
+
+    tokens.forEach(function(el){
+      el.addEventListener('dragstart', function(ev){ dragStart(el); if(ev.dataTransfer){ try{ev.dataTransfer.setData('text/plain', el.getAttribute('data-role'));}catch(_){ } ev.dataTransfer.effectAllowed='move'; }});
+      el.addEventListener('dragend', dragEnd);
+      el.addEventListener('keydown', function(e){
+        if ((e.code && e.code==='Space') || e.keyCode===32){
+          if (e.preventDefault) e.preventDefault();
+          if(!dragEl){ dragStart(el); }
+          else{ var target = (el.parentElement && hasClass(el.parentElement,'seat')) ? tray : (nearestEmptySeat() || tray); dragDrop(target); dragEnd(); }
+        }
       });
     });
 
-    const reset=document.getElementById("resetBtn");
-    reset.onclick=()=>{seats.forEach(s=>{if(s.firstChild)tray.appendChild(s.firstChild)});update();};
+    [tray].concat(seats).forEach(function(zone){
+      zone.addEventListener('dragover', function(ev){ if (ev.preventDefault) ev.preventDefault(); if (ev.dataTransfer) ev.dataTransfer.dropEffect='move'; });
+      zone.addEventListener('drop', function(ev){ if (ev.preventDefault) ev.preventDefault(); dragDrop(zone); });
+    });
 
-    function update(){
-      seats.forEach(s=>s.classList.toggle("occupied",!!s.firstChild));
-      check.disabled=seats.filter(s=>s.firstChild).length!==5;
+    function dragDrop(target){
+      if(!dragEl) return;
+      if (hasClass(target,'seat')){
+        if(target.firstElementChild){ tray.appendChild(target.firstElementChild); markSeats(); }
+        target.appendChild(dragEl);
+      } else { tray.appendChild(dragEl); }
+      markSeats(); successBlink(target); saveState();
     }
 
-    check.onclick=()=>{
-      const arr=seats.map(s=>s.firstChild?.dataset.role||null);
-      if(JSON.stringify(arr)===JSON.stringify(SOL_SLOTS)){
-        document.getElementById("winText").textContent=NEXT_CLUE;
-        document.getElementById("winModal").style.display="flex";
-      }else alert("Algo no cuadra...");
-    };
+    function markSeats(){
+      seats.forEach(function(s){
+        if (s.firstElementChild){ if(!hasClass(s,'occupied')) s.className += ' occupied'; }
+        else { s.className = s.className.replace(/\s*occupied\b/,''); }
+      });
+      updateCheckEnabled();
+    }
 
-    document.getElementById("closeWin").onclick=()=>document.getElementById("winModal").style.display="none";
+    function nearestEmptySeat(){ for (var i=0;i<seats.length;i++){ if(!seats[i].firstElementChild) return seats[i]; } return null; }
+
+    function updateCheckEnabled(){
+      var placed = 0;
+      seats.forEach(function(s){ if (s.firstElementChild) placed++; });
+      checkBtn.disabled = placed !== 5;
+    }
+
+    // === Comprobación ===
+    var resetBtn = qs('#resetBtn');
+    var winModal = qs('#winModal');
+    var winText  = qs('#winText');
+    var closeWin = qs('#closeWin');
+
+    checkBtn.addEventListener('click', checkSolution);
+    resetBtn.addEventListener('click', function(){ resetAll(); saveState(); });
+    closeWin.addEventListener('click', function(){ winModal.style.display='none'; });
+
+    function currentLine(){
+      var arr = [];
+      seats.forEach(function(s){ var c=s.firstElementChild; arr.push(c ? c.getAttribute('data-role') : null); });
+      return arr;
+    }
+
+    function checkSolution(){
+      var arr = currentLine();
+      for (var i=0;i<arr.length;i++){ if(!arr[i]){ toast('Coloca a <b>todos</b> los personajes antes de comprobar.'); beep(140,.07); return; } }
+      var ok = JSON.stringify(arr) === JSON.stringify(SOL_SLOTS);
+      if(ok){
+        winText.innerHTML = NEXT_CLUE;
+        winModal.style.display='flex';
+        confetti();
+        beep(880,.06); setTimeout(function(){beep(1320,.06);},90); setTimeout(function(){beep(1760,.08);},180);
+      }else{
+        toast('Algo no cuadra… '+logicHints(arr));
+        var hall=qs('.hall'); if(hall&&hall.animate) hall.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+        beep(120,.06); setTimeout(function(){beep(90,.06);},90);
+      }
+    }
+
+    function logicHints(arr){
+      var pos={}; for (var i=0;i<arr.length;i++){ pos[arr[i]]=i; }
+      var fails=[];
+      if(!(pos.Campesino===0||pos.Campesino===4)) fails.push('El campesino debe ir a un extremo');
+      if(!(pos.Caballero!==0 && pos.Caballero!==4 && (arr[pos.Caballero-1]==='Noble'||arr[pos.Caballero+1]==='Noble') && (arr[pos.Caballero-1]==='Campesino'||arr[pos.Caballero+1]==='Campesino'))) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
+      if(Math.abs(pos.Rey-pos.Campesino)===1) fails.push('El rey no puede estar junto al campesino');
+      if(Math.abs(pos["Clérigo"]-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
+      if(!(pos.Noble < pos.Rey)) fails.push('El noble va a la izquierda del rey');
+      if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
+      return fails.length? fails[0]+'.' : '¡Muy cerca! Revisa el orden exacto.';
+    }
+
+    function resetAll(){
+      seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
+      markSeats();
+      toast('Mesa reiniciada.');
+    }
+
+    // === Persistencia de la mesa (no del gate) ===
+    function saveState(){
+      try{
+        var state = { seats: currentLine(), tray: [] };
+        var kids = qsa('.token', tray);
+        kids.forEach(function(k){ state.tray.push(k.getAttribute('data-role')); });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }catch(_){}
+    }
+
+    function loadState(){
+      try{
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return false;
+        var st = JSON.parse(raw);
+        if(!st || !st.seats) return false;
+
+        seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
+
+        for (var i=0;i<st.seats.length;i++){
+          var role = st.seats[i];
+          if (!role) continue;
+          var el = findInTray(role);
+          if (el) seats[i].appendChild(el);
+        }
+
+        if(st.tray && st.tray.length){
+          st.tray.forEach(function(role){
+            var el = findInTray(role);
+            if (el) tray.appendChild(el);
+          });
+        }
+        markSeats();
+        return true;
+      }catch(_){ return false; }
+    }
+
+    function findInTray(role){
+      var kids = qsa('.token', tray);
+      for (var k=0;k<kids.length;k++){
+        if (kids[k].getAttribute('data-role') === role) return kids[k];
+      }
+      return null;
+    }
+
+    loadState();
+    updateCheckEnabled();
+
+    // === Utilidades visuales/sonoras ===
+    function toast(html){ var t=document.createElement('div'); t.innerHTML=html; t.style.position='fixed'; t.style.bottom='16px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='#000c'; t.style.color='#fff'; t.style.padding='8px 12px'; t.style.borderRadius='8px'; t.style.border='2px solid #334155'; t.style.zIndex=50; t.style.fontSize='12px'; document.body.appendChild(t); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },2200); }
+    function successBlink(el){ if(!el||!el.animate) return; el.animate([{filter:'brightness(1)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:220}); }
+
+    var _audioCtx=null;
+    function getCtx(){ if(_audioCtx) return _audioCtx; var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return null; try{_audioCtx=new Ctx();}catch(_){_audioCtx=null;} return _audioCtx; }
+    function beep(freq,dur){ if(freq==null)freq=440; if(dur==null)dur=.08; var ctx=getCtx(); if(!ctx) return; var o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.value=freq; o.connect(g); g.connect(ctx.destination); var t=ctx.currentTime; try{ g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.2,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+dur);}catch(_){ } o.start(); o.stop(t+dur); }
+
+    function confetti(){ for(var i=0;i<36;i++){ var c=document.createElement('div'); var size=6+Math.random()*6; c.style.position='fixed'; c.style.left=(50+Math.random()*20-10)+'%'; c.style.top='-10px'; c.style.width=size+'px'; c.style.height=size+'px'; var colors=['#ffd166','#ef476f','#06d6a0','#118ab2']; c.style.background=colors[i%4]; c.style.transform='rotate('+(Math.random()*360)+'deg)'; c.style.borderRadius='2px'; c.style.zIndex=60; document.body.appendChild(c); var endY=window.innerHeight+20; if(c.animate){ c.animate([{transform:c.style.transform, top:'-10px'},{transform:c.style.transform, top:endY+'px'}],{duration:1200+Math.random()*600, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=function(){ if(c.parentNode) c.parentNode.removeChild(c); }; } } }
+
+    // Atajo docente Alt+S
+    document.addEventListener('keydown', function(e){
+      var key=(e.key||'').toLowerCase();
+      if((e.altKey&&key==='s')||(e.altKey&&e.keyCode===83)){
+        resetAll();
+        var order = SOL_SLOTS.slice();
+        order.forEach(function(name,i){
+          var el = findInTray(name);
+          if(el) seats[i].appendChild(el);
+        });
+        markSeats(); saveState(); toast('Solución colocada (Alt+S).');
+      }
+    });
+
   })();
   </script>
 </body>
 </html>
+
