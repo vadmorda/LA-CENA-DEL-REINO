@@ -297,17 +297,37 @@
       }
     }
 
-    function logicHints(arr){
-      var pos={}; for (var i=0;i<arr.length;i++){ pos[arr[i]]=i; }
-      var fails=[];
-      if(!(pos.Campesino===0||pos.Campesino===4)) fails.push('El campesino debe ir a un extremo');
-      if(!(pos.Caballero!==0 && pos.Caballero!==4 && (arr[pos.Caballero-1]==='Noble'||arr[pos.Caballero+1]==='Noble') && (arr[pos.Caballero-1]==='Campesino'||arr[pos.Caballero+1]==='Campesino'))) fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
-      if(Math.abs(pos.Rey-pos.Campesino)===1) fails.push('El rey no puede estar junto al campesino');
-      if(Math.abs(pos["Clérigo"]-pos.Rey)!==1) fails.push('Clérigo y rey deben estar juntos');
-      if(!(pos.Noble < pos.Rey)) fails.push('El noble va a la izquierda del rey');
-      if(pos.Rey===0||pos.Rey===4) fails.push('El rey no puede ir en los extremos');
-      return fails.length? fails[0]+'.' : '¡Muy cerca! Revisa el orden exacto.';
-    }
+function logicHints(arr){
+  var pos = {}; for (var i=0;i<arr.length;i++){ pos[arr[i]] = i; }
+  var fails = [];
+
+  // A) Caballero justo entre noble y campesino
+  var cab = pos['Caballero'];
+  if(!(cab!==0 && cab!==4 && (
+      (arr[cab-1]==='Noble' && arr[cab+1]==='Campesino') ||
+      (arr[cab-1]==='Campesino' && arr[cab+1]==='Noble')
+  ))){
+    fails.push('El caballero debe estar <i>justo</i> entre noble y campesino');
+  }
+
+  // B) Clérigo junto al rey
+  if(Math.abs(pos['Clérigo'] - pos['Rey']) !== 1){
+    fails.push('Clérigo y rey deben estar juntos');
+  }
+
+  // C) Noble a la izquierda del rey
+  if(!(pos['Noble'] < pos['Rey'])){
+    fails.push('El noble va a la izquierda del rey');
+  }
+
+  // D) Entre rey y campesino hay dos personas (distancia 3)
+  if(Math.abs(pos['Rey'] - pos['Campesino']) !== 3){
+    fails.push('Entre rey y campesino debe haber dos personas');
+  }
+
+  return fails.length ? fails[0]+'.' : '¡Muy cerca! Revisa el orden exacto.';
+}
+
 
     function resetAll(){
       seats.forEach(function(s){ if(s.firstElementChild) tray.appendChild(s.firstElementChild); });
