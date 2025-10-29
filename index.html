@@ -20,7 +20,7 @@
     .table::before{ content:""; position:absolute; inset:10% 4%; border-radius:8px; background: repeating-linear-gradient(45deg,#f0d7a8 0 10px,#e8cf9e 10px 20px); filter:contrast(1.1) saturate(0.9) }
     .seats{ position:absolute; inset:8% 4%; display:grid; grid-template-columns:repeat(5,1fr); gap:6px; align-items:end }
     .seat{ position:relative; height:100%; min-height:90px; border:2px dashed rgba(255,255,255,.25); border-radius:8px; display:flex; align-items:center; justify-content:center; padding:6px; transition:.15s }
-    .seat[data-label]::after{ content:attr(data-label); position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:#eee; opacity:.7 }
+    .seat[data-label]::after{ content:attr(data-label); position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:10px; color:#000; opacity:.7 }
     .seat.occupied{ border-style:solid; border-color:#96eaa6 }
     .tray{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; padding:10px; border:2px dashed #334155; border-radius:10px; background:#0e1627 }
     .token{ width:88px; height:100px; user-select:none; cursor:grab; position:relative; display:flex; align-items:end; justify-content:center } .token:active{cursor:grabbing}
@@ -155,7 +155,7 @@
 
   <script>
   (function(){
-    var NEXT_CLUE = "SI QUIERES RESOLVER EL SIGUIENTE ENIGMA: El trono guarda los secretos del reino. Bajo sus pies, la espiga señala el origen. En sus brazos, dos cruces equilibran el poder y, enlo más alto, la corona con cinco joyas observa todo...";
+    var NEXT_CLUE = "EL ENIGMA DEL TRONO. El trono guarda los secretos de todo un reino. A sus pies, la espiga señala el origen. En sus brazos, las cruces equilibran el poder y, enlo más alto, la corona con  joyas observa todo. Cuenta bien.";
     var SOL_SLOTS = ["Campesino","Caballero","Noble","Rey","Clérigo"];
     var STORAGE_KEY = "banquete_state_v1"; // (solo para la mesa, no para el gate)
 
